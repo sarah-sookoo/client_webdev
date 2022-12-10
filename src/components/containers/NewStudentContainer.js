@@ -20,18 +20,31 @@ class NewStudentContainer extends Component {
     this.state = {
       firstname: "", 
       lastname: "", 
+      email: "",
+      gpa: 0,
+      gpaError: "",
       campusId: null, 
       redirect: false, 
       redirectId: null
     };
   }
 
+  checkGPA = () => {
+    const { gpa } = this.state;
+    this.setState({
+      gpaError:
+        gpa <= 4 ? null : 'GPA must be between 0.0 and 4.0'
+    });
+  }
+
   // Capture input data when it is entered
   handleChange = event => {
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value},() => {
+        this.checkGPA();
     });
-  }
+      console.log(this.state);
+    }
 
   // Take action after user click the submit button
   handleSubmit = async event => {
@@ -40,7 +53,9 @@ class NewStudentContainer extends Component {
     let student = {
         firstname: this.state.firstname,
         lastname: this.state.lastname,
-        campusId: this.state.campusId
+        campusId: this.state.campusId,
+        email: this.state.email,
+        gpa: this.state.gpa
     };
     
     // Add new student in back-end database
@@ -52,7 +67,9 @@ class NewStudentContainer extends Component {
       lastname: "", 
       campusId: null, 
       redirect: true, 
-      redirectId: newStudent.id
+      redirectId: newStudent.id,
+      email: "",
+      gpa: 0
     });
   }
 
